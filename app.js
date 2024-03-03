@@ -4,20 +4,23 @@
 // 4. views 視圖
 // MVC
 
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var postsRouter = require('./routes/posts');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const postsRouter = require('./routes/posts');
+const brickRouter = require('./routes/brick');
+const storyRouter = require('./routes/story');
+
 const mongoose = require('mongoose');
 
 var app = express();
 
-mongoose.connect('mongodb+srv://kelvin80121:iEK0Zh2uWzgUnNLK@cluster0.x7cwh1p.mongodb.net/')
+mongoose.connect('mongodb+srv://kelvin80121:iSKM5Vf2UE7KIZPL@jstorydemo.fsnxxtf.mongodb.net/?retryWrites=true&w=majority&appName=jStoryDemo')
     .then(res=> console.log("連線資料成功"));
 
 
@@ -32,5 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
+app.use('/brick', brickRouter);
+app.use('/story', storyRouter);
 
 module.exports = app;
