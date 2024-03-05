@@ -13,21 +13,20 @@ const cors = require('cors');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
-const brickRouter = require('./routes/brick');
-const storyRouter = require('./routes/story');
-const shortRouter = require('./routes/short');
-const photosRouter = require('./routes/photos');
-const ytLiveViewRouter = require('./routes/ytLiveView');
+const brickRouter = require('./routes/brick/brick');
+const storyRouter = require('./routes/media/story');
+const shortRouter = require('./routes/media/short');
+const photosRouter = require('./routes/media/photos');
+const ytLiveViewRouter = require('./routes/media/ytLiveView');
 
 const mongoose = require('mongoose');
 
 var app = express();
 
 mongoose.connect('mongodb+srv://kelvin80121:iSKM5Vf2UE7KIZPL@jstorydemo.fsnxxtf.mongodb.net/?retryWrites=true&w=majority&appName=jStoryDemo')
-    .then(res=> console.log("連線資料成功"));
+  .then(res=> console.log("連線資料成功"));
 
 
-    
 app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());

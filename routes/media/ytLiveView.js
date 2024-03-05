@@ -1,12 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const YtLiveViewModel = require('../models/media/ytLiveViewModel'); 
+const YtLiveViewModel = require('../../models/media/ytLiveViewModel'); 
 
 router.post('/', async (req, res) => {
   try {
     const ytLiveView = new YtLiveViewModel(req.body);
     await ytLiveView.save();
     res.status(201).send(ytLiveView);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.post('/bulk', async (req, res) => {
+  try {
+    const ytLiveViews = await YtLiveViewModel.insertMany(req.body);
+    res.status(201).send(ytLiveViews);
   } catch (error) {
     res.status(400).send(error);
   }
@@ -56,5 +65,7 @@ router.delete('/:id', async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+
 
 module.exports = router;

@@ -30,7 +30,7 @@ const shortSchema = new mongoose.Schema({
   kind: {
     type: String,
     required: [true, 'Kind field is required'],
-    enum: ['Short', 'Photos', 'Podcast', 'YT', 'Stream']
+    enum: ['Short']
   },
   tags: [String],
   content: contentSchema

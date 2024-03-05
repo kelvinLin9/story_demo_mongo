@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 
 const ytLiveViewSchema = new mongoose.Schema({
+  created_at: {
+    type: Date,
+    default: Date.now
+  },
   kind: {
     type: String,
     required: [true, 'Kind field is required'],
-    enum: ['Short', 'Photos', 'Podcast', 'YT', 'Stream']
+    enum: ['YTLiveView', 'YTLiveTV']
   },
   tags: {
     type: [String],
@@ -32,6 +36,9 @@ const ytLiveViewSchema = new mongoose.Schema({
       }
     }
   }
+},
+{
+  versionKey: false
 });
 
 const YtLiveView = mongoose.model('YtLiveView', ytLiveViewSchema);
