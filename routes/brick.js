@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Brick = require('../models/brickModel');
+const Brick = require('../models/brick/brickModel');
 
 router.post('/', async (req, res) => {
   try {

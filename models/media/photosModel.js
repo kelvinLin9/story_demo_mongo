@@ -37,6 +37,9 @@ const photosSchema = new mongoose.Schema({
 }, {
   toJSON: { virtuals: true, versionKey: false },
   toObject: { virtuals: true, versionKey: false }
+},
+{
+  versionKey: false
 });
 
 const Photos = mongoose.model('Photos', photosSchema);

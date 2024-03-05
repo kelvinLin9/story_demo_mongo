@@ -37,6 +37,9 @@ const shortSchema = new mongoose.Schema({
 }, {
   toJSON: { virtuals: true, versionKey: false },
   toObject: { virtuals: true, versionKey: false }
+},
+{
+  versionKey: false
 });
 
 const Short = mongoose.model('Short', shortSchema);

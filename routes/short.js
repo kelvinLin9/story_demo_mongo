@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Short = require('../models/shortModel');
+const Short = require('../models/media/shortModel');
 
 router.post('/', async (req, res) => {
   try {

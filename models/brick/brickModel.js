@@ -24,7 +24,6 @@ const brickSchema = new mongoose.Schema({
   content: { type: contentSchema, required: true }
 }, 
 { 
-  timestamps: true,
   versionKey: false
 }); 
 

@@ -16,6 +16,8 @@ const postsRouter = require('./routes/posts');
 const brickRouter = require('./routes/brick');
 const storyRouter = require('./routes/story');
 const shortRouter = require('./routes/short');
+const photosRouter = require('./routes/photos');
+const ytLiveViewRouter = require('./routes/ytLiveView');
 
 const mongoose = require('mongoose');
 
@@ -39,5 +41,7 @@ app.use('/posts', postsRouter);
 app.use('/brick', brickRouter);
 app.use('/story', storyRouter);
 app.use('/short', shortRouter);
+app.use('/photos', photosRouter);
+app.use('/ytLiveView', ytLiveViewRouter);
 
 module.exports = app;

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Photos = require('../models/photosModel');
+const Photos = require('../models/media/photosModel');
 
 router.post('/', async (req, res) => {
   try {

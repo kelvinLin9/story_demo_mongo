@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const Post = require('../models/postsModel');
+const Post = require('../models/media/postsModel');
 
 /* GET users listing. */
 router.get('/', async function(req, res, next) {

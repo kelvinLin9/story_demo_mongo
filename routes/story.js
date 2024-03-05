@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Story = require('../models/storyModel');
+const Story = require('../models/story/storyModel');
 
 router.post('/:storyName', async (req, res) => {
   try {
