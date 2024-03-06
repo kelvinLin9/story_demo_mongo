@@ -2,6 +2,20 @@ const express = require('express');
 const router = express.Router();
 const YtLiveViewModel = require('../../models/media/ytLiveViewModel'); 
 
+
+
+// async function listAllIds() {
+//   try {
+//     const ids = await YtLiveViewModel.find({}).select('_id');
+//     console.log(ids);
+//   } catch (error) {
+//     console.error('Error fetching IDs:', error);
+//   }
+// }
+
+// listAllIds();
+
+
 router.post('/', async (req, res) => {
   try {
     const ytLiveView = new YtLiveViewModel(req.body);

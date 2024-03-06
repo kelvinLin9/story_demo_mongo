@@ -14,16 +14,17 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const bricks = await Brick.find({});
+    const bricks = await Brick.find({}).populate('content'); 
     res.status(200).send(bricks);
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
+
 router.get('/:id', async (req, res) => {
   try {
-    const brick = await Brick.findById(req.params.id);
+    const brick = await Brick.findById(req.params.id).populate('content');
     if (!brick) {
       return res.status(404).send();
     }
@@ -32,6 +33,7 @@ router.get('/:id', async (req, res) => {
     res.status(500).send(error);
   }
 });
+
 
 router.patch('/:id', async (req, res) => {
   try {
@@ -56,5 +58,7 @@ router.delete('/:id', async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+
 
 module.exports = router;

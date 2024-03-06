@@ -41,6 +41,6 @@ const ytLiveViewSchema = new mongoose.Schema({
   versionKey: false
 });
 
-const YtLiveView = mongoose.model('YtLiveView', ytLiveViewSchema);
+const YTLiveView = mongoose.model('YTLiveView', ytLiveViewSchema);
 
-module.exports = YtLiveView;
+module.exports = YTLiveView;
