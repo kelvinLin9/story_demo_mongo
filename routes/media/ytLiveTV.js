@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const YtLiveViewModel = require('../../models/media/ytModel'); 
+const YtModel = require('../../models/media/ytModel'); 
 
 
 
 // async function listAllIds() {
 //   try {
-//     const ids = await YtLiveViewModel.find({}).select('_id');
+//     const ids = await YtModel.find({}).select('_id');
 //     console.log(ids);
 //   } catch (error) {
 //     console.error('Error fetching IDs:', error);
@@ -18,9 +18,9 @@ const YtLiveViewModel = require('../../models/media/ytModel');
 
 router.post('/', async (req, res) => {
   try {
-    const ytLiveView = new YtLiveViewModel(req.body);
-    await ytLiveView.save();
-    res.status(201).send(ytLiveView);
+    const ytLiveTV = new YtModel(req.body);
+    await ytLiveTV.save();
+    res.status(201).send(ytLiveTV);
   } catch (error) {
     res.status(400).send(error);
   }
@@ -28,8 +28,8 @@ router.post('/', async (req, res) => {
 
 router.post('/bulk', async (req, res) => {
   try {
-    const ytLiveViews = await YtLiveViewModel.insertMany(req.body);
-    res.status(201).send(ytLiveViews);
+    const ytLiveTVs = await YtModel.insertMany(req.body);
+    res.status(201).send(ytLiveTVs);
   } catch (error) {
     res.status(400).send(error);
   }
@@ -37,8 +37,8 @@ router.post('/bulk', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const ytLiveViews = await YtLiveViewModel.find({});
-    res.status(200).send(ytLiveViews);
+    const ytLiveTVs = await YtModel.find({});
+    res.status(200).send(ytLiveTVs);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -46,11 +46,11 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const ytLiveView = await YtLiveViewModel.findById(req.params.id);
-    if (!ytLiveView) {
+    const ytLiveTV = await YtModel.findById(req.params.id);
+    if (!ytLiveTV) {
       return res.status(404).send();
     }
-    res.status(200).send(ytLiveView);
+    res.status(200).send(ytLiveTV);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -58,11 +58,11 @@ router.get('/:id', async (req, res) => {
 
 router.patch('/:id', async (req, res) => {
   try {
-    const ytLiveView = await YtLiveViewModel.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-    if (!ytLiveView) {
+    const ytLiveTV = await YtModel.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!ytLiveTV) {
       return res.status(404).send();
     }
-    res.status(200).send(ytLiveView);
+    res.status(200).send(ytLiveTV);
   } catch (error) {
     res.status(400).send(error);
   }
@@ -70,11 +70,11 @@ router.patch('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    const ytLiveView = await YtLiveViewModel.findByIdAndDelete(req.params.id);
-    if (!ytLiveView) {
+    const ytLiveTV = await YtModel.findByIdAndDelete(req.params.id);
+    if (!ytLiveTV) {
       return res.status(404).send();
     }
-    res.status(200).send({ message: "YtLiveViewModel deleted successfully" });
+    res.status(200).send({ message: "YtModel deleted successfully" });
   } catch (error) {
     res.status(500).send(error);
   }

@@ -18,6 +18,7 @@ const storyRouter = require('./routes/media/story');
 const shortRouter = require('./routes/media/short');
 const photosRouter = require('./routes/media/photos');
 const ytLiveViewRouter = require('./routes/media/ytLiveView');
+const ytLiveTVRouter = require('./routes/media/ytLiveTV');
 
 const mongoose = require('mongoose');
 
@@ -42,5 +43,6 @@ app.use('/story', storyRouter);
 app.use('/short', shortRouter);
 app.use('/photos', photosRouter);
 app.use('/ytLiveView', ytLiveViewRouter);
+app.use('/ytLiveTV', ytLiveTVRouter);
 
 module.exports = app;
