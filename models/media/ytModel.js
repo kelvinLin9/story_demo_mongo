@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ytLiveViewSchema = new mongoose.Schema({
+const ytSchema = new mongoose.Schema({
   created_at: {
     type: Date,
     default: Date.now
@@ -41,6 +41,7 @@ const ytLiveViewSchema = new mongoose.Schema({
   versionKey: false
 });
 
-const YTLiveView = mongoose.model('YTLiveView', ytLiveViewSchema);
+const YTLiveView = mongoose.model('YTLiveView', ytSchema);
+const YTLiveTV = mongoose.model('YTLiveTV', ytSchema);
 
-module.exports = YTLiveView;
+module.exports = {YTLiveView, YTLiveTV};

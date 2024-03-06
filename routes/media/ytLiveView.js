@@ -1,24 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const YtLiveViewModel = require('../../models/media/ytModel'); 
+const { YTLiveView } = require('../../models/media/ytModel'); 
 
-
-
-// async function listAllIds() {
-//   try {
-//     const ids = await YtLiveViewModel.find({}).select('_id');
-//     console.log(ids);
-//   } catch (error) {
-//     console.error('Error fetching IDs:', error);
-//   }
-// }
-
-// listAllIds();
 
 
 router.post('/', async (req, res) => {
   try {
-    const ytLiveView = new YtLiveViewModel(req.body);
+    const ytLiveView = new YTLiveView(req.body);
     await ytLiveView.save();
     res.status(201).send(ytLiveView);
   } catch (error) {
@@ -28,7 +16,7 @@ router.post('/', async (req, res) => {
 
 router.post('/bulk', async (req, res) => {
   try {
-    const ytLiveViews = await YtLiveViewModel.insertMany(req.body);
+    const ytLiveViews = await YTLiveView.insertMany(req.body);
     res.status(201).send(ytLiveViews);
   } catch (error) {
     res.status(400).send(error);
@@ -37,7 +25,7 @@ router.post('/bulk', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const ytLiveViews = await YtLiveViewModel.find({});
+    const ytLiveViews = await YTLiveView.find({});
     res.status(200).send(ytLiveViews);
   } catch (error) {
     res.status(500).send(error);
@@ -46,7 +34,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const ytLiveView = await YtLiveViewModel.findById(req.params.id);
+    const ytLiveView = await YTLiveView.findById(req.params.id);
     if (!ytLiveView) {
       return res.status(404).send();
     }
@@ -58,7 +46,7 @@ router.get('/:id', async (req, res) => {
 
 router.patch('/:id', async (req, res) => {
   try {
-    const ytLiveView = await YtLiveViewModel.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const ytLiveView = await YTLiveView.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!ytLiveView) {
       return res.status(404).send();
     }
@@ -70,11 +58,11 @@ router.patch('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    const ytLiveView = await YtLiveViewModel.findByIdAndDelete(req.params.id);
+    const ytLiveView = await YTLiveView.findByIdAndDelete(req.params.id);
     if (!ytLiveView) {
       return res.status(404).send();
     }
-    res.status(200).send({ message: "YtLiveViewModel deleted successfully" });
+    res.status(200).send({ message: "YTLiveView deleted successfully" });
   } catch (error) {
     res.status(500).send(error);
   }
