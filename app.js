@@ -14,6 +14,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 const brickRouter = require('./routes/brick/brick');
+const streamRouter = require('./routes/media/stream');
 const storyRouter = require('./routes/media/story');
 const shortRouter = require('./routes/media/short');
 const photosRouter = require('./routes/media/photos');
@@ -44,5 +45,6 @@ app.use('/short', shortRouter);
 app.use('/photos', photosRouter);
 app.use('/ytLiveView', ytLiveViewRouter);
 app.use('/ytLiveTV', ytLiveTVRouter);
+app.use('/stream', streamRouter);
 
 module.exports = app;
