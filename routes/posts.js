@@ -1,24 +1,75 @@
-var express = require('express');
-var router = express.Router();
-const Post = require('../models/media/postsModel');
+const express = require('express');
+const router = express.Router();
+const Post = require('../models/media/postsModel'); 
 
-/* GET users listing. */
-router.get('/', async function(req, res, next) {
-  const post = await Post.find();
-  // res.send('respond with a resource..');
-  res.status(200).json({
-    post
-  })
+// 创建新帖子
+router.post('/', async (req, res) => {
+  try {
+    const post = new Post(req.body);
+    await post.save();
+    res.status(201).send(post);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
-router.post('/', async function(req, res, next) {
-  console.log(req.body);
-  const newPost = await Post.create(req.body);
-  res.status(200).json({
-    statusbar: 'success',
-    post: newPost
-  })
+// 批量创建帖子
+router.post('/bulk', async (req, res) => {
+  try {
+    const posts = await Post.insertMany(req.body);
+    res.status(201).send(posts);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
+// 获取所有帖子
+router.get('/', async (req, res) => {
+  try {
+    const posts = await Post.find({});
+    res.status(200).send(posts);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// 根据ID获取单个帖子
+router.get('/:id', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).send();
+    }
+    res.status(200).send(post);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// 根据ID更新帖子
+router.patch('/:id', async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!post) {
+      return res.status(404).send();
+    }
+    res.status(200).send(post);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+// 根据ID删除帖子
+router.delete('/:id', async (req, res) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.id);
+    if (!post) {
+      return res.status(404).send();
+    }
+    res.status(200).send({ message: "Post deleted successfully" });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 module.exports = router;

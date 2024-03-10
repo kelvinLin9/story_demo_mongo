@@ -12,14 +12,9 @@ const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const postsRouter = require('./routes/posts');
+const postRouter = require('./routes/posts');
 const brickRouter = require('./routes/brick/brick');
-const streamRouter = require('./routes/media/stream');
-const storyRouter = require('./routes/media/story');
-const shortRouter = require('./routes/media/short');
-const photosRouter = require('./routes/media/photos');
-const ytLiveViewRouter = require('./routes/media/ytLiveView');
-const ytLiveTVRouter = require('./routes/media/ytLiveTV');
+
 
 const mongoose = require('mongoose');
 
@@ -38,13 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/posts', postsRouter);
+app.use('/post', postRouter);
 app.use('/brick', brickRouter);
-app.use('/story', storyRouter);
-app.use('/short', shortRouter);
-app.use('/photos', photosRouter);
-app.use('/ytLiveView', ytLiveViewRouter);
-app.use('/ytLiveTV', ytLiveTVRouter);
-app.use('/stream', streamRouter);
 
 module.exports = app;

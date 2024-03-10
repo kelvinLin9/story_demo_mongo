@@ -15,11 +15,11 @@ const brickSchema = new mongoose.Schema({
   },
   image: { 
     type: String,
-    required: [true, 'title 未填寫']
+    required: [true, 'image 未填寫']
   },
   content: [{ 
     type: mongoose.Schema.ObjectId,
-    ref: "YTLiveView",
+    ref: "Post",
     required: [true, 'ID 未填寫']
   }]
 }, 
