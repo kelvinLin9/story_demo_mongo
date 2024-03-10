@@ -35,7 +35,7 @@ const postSchema = new mongoose.Schema({
   },
   content: contentSchema,
 }, {
-  timestamps: { createdAt: 'created_at' }, 
+  timestamps: true,
   versionKey: false,
 });
 

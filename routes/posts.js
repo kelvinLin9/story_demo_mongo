@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../models/media/postsModel'); 
+const Post = require('../models/postsModel'); 
 
 // 创建新帖子
 router.post('/', async (req, res) => {

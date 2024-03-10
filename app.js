@@ -12,9 +12,9 @@ const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const storyRouter = require('./routes/story');
+const brickRouter = require('./routes/brick');
 const postRouter = require('./routes/posts');
-const brickRouter = require('./routes/brick/brick');
-
 
 const mongoose = require('mongoose');
 
@@ -33,7 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/post', postRouter);
+app.use('/story', storyRouter);
 app.use('/brick', brickRouter);
+app.use('/post', postRouter);
 
 module.exports = app;

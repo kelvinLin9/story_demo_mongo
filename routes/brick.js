@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Photos = require('../../models/media/photosModel');
+const Brick = require('../models/brickModel');
 
 router.post('/', async (req, res) => {
   try {
-    const photos = new Photos(req.body);
-    await photos.save();
-    res.status(201).send(photos);
+    const brick = new Brick(req.body);
+    await brick.save();
+    res.status(201).send(brick);
   } catch (error) {
     res.status(400).send(error);
   }
@@ -14,32 +14,34 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const photos = await Photos.find({});
-    res.status(200).send(photos);
+    const bricks = await Brick.find({}).populate('content'); 
+    res.status(200).send(bricks);
   } catch (error) {
     res.status(500).send(error);
   }
 });
+
 
 router.get('/:id', async (req, res) => {
   try {
-    const photos = await Photos.findById(req.params.id);
-    if (!photos) {
+    const brick = await Brick.findById(req.params.id).populate('content');
+    if (!brick) {
       return res.status(404).send();
     }
-    res.status(200).send(photos);
+    res.status(200).send(brick);
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
+
 router.patch('/:id', async (req, res) => {
   try {
-    const photos = await Photos.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-    if (!photos) {
+    const brick = await Brick.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!brick) {
       return res.status(404).send();
     }
-    res.status(200).send(photos);
+    res.status(200).send(brick);
   } catch (error) {
     res.status(400).send(error);
   }
@@ -47,14 +49,16 @@ router.patch('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    const photos = await Photos.findByIdAndDelete(req.params.id);
-    if (!photos) {
+    const brick = await Brick.findByIdAndDelete(req.params.id);
+    if (!brick) {
       return res.status(404).send();
     }
-    res.status(200).send({ message: "photos deleted successfully" });
+    res.status(200).send(brick);
   } catch (error) {
     res.status(500).send(error);
   }
 });
+
+
 
 module.exports = router;

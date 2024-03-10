@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const brickSchema = new mongoose.Schema({
-  created_at: {
-    type: Date,
-    default: Date.now
-  },
   brickName: { 
     type: String,
     required: [true, 'brickName 未填寫']
@@ -24,6 +20,7 @@ const brickSchema = new mongoose.Schema({
   }]
 }, 
 { 
+  timestamps: true,
   versionKey: false
 });
 
