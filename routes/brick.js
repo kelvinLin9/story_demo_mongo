@@ -37,7 +37,7 @@ router.get('/id/:id', async (req, res) => {
 router.get('/brickName/:brickName', async (req, res) => {
   console.log(req.params.brickName);
   try {
-    const { brickName } = req.params.brickName;
+    const brickName = req.params.brickName;
     const brick = await Brick.findOne({ brickName: brickName }).populate('content');
     if (!brick) {
       return res.status(404).send({ message: "No brick found with the given name" });
