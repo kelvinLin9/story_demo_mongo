@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 });
 
 
-router.get('/:id', async (req, res) => {
+router.get('id/:id', async (req, res) => {
   try {
     const brick = await Brick.findById(req.params.id).populate('content');
     if (!brick) {
@@ -34,21 +34,22 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.get('/:brickName', async (req, res) => {
-  try {
-    const { brickName } = req.params;
+// router.get('/:brickName', async (req, res) => {
+//   console.log(req.params.brickName);
+//   try {
+//     const { brickName } = req.params.brickName;
 
-    // 使用storyName进行查询
-    const brick = await Brick.findOne({ brickName: brickName }).populate('content');
-    if (!brick) {
-      // 如果没有找到匹配的文档，返回404
-      return res.status(404).send({ message: "No brick found with the given name" });
-    }
-    res.status(200).send(brick);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+//     // 使用storyName进行查询
+//     const brick = await Brick.findOne({ brickName: brickName }).populate('content');
+//     if (!brick) {
+//       // 如果没有找到匹配的文档，返回404
+//       return res.status(404).send({ message: "No brick found with the given name" });
+//     }
+//     res.status(200).send(brick);
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// });
 
 router.patch('/:id', async (req, res) => {
   try {

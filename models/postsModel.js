@@ -19,7 +19,8 @@ const hostSchema = new mongoose.Schema({
 const contentSchema = new mongoose.Schema({
   media: mediaSchema,
   image: imageSchema,
-  host: hostSchema, 
+  host: hostSchema,
+  channel: String, 
 });
 
 const postSchema = new mongoose.Schema({
