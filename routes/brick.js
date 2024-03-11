@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 });
 
 
-router.get('id/:id', async (req, res) => {
+router.get('/id/:id', async (req, res) => {
   try {
     const brick = await Brick.findById(req.params.id).populate('content');
     if (!brick) {
