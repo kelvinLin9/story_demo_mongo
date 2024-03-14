@@ -27,7 +27,7 @@ const postSchema = new mongoose.Schema({
   kind: {
     type: String,
     required: true,
-    enum: ['Stream', 'Podcast', 'Short', 'Photos', 'YTLiveTV', 'YTLiveView'],
+    enum: ['stream', 'podcast', 'short', 'photos', 'livetv', 'liveview'],
   },
   tags: [String],
   likes: {
