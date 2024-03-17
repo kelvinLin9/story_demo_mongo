@@ -9,6 +9,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -20,7 +21,7 @@ const mongoose = require('mongoose');
 
 var app = express();
 
-mongoose.connect('mongodb+srv://kelvin80121:iSKM5Vf2UE7KIZPL@jstorydemo.fsnxxtf.mongodb.net/?retryWrites=true&w=majority&appName=jStoryDemo')
+mongoose.connect(process.env.DB_CONNECTION_STRING)
   .then(res=> console.log("連線資料成功"));
 
 
