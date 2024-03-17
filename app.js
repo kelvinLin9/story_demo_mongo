@@ -21,7 +21,7 @@ const mongoose = require('mongoose');
 
 var app = express();
 
-mongoose.connect(process.env.DB_CONNECTION_STRING)
+mongoose.connect('mongodb+srv://kelvin80121:iSKM5Vf2UE7KIZPL@jstorydemo.fsnxxtf.mongodb.net/?retryWrites=true&w=majority&appName=jStoryDemo')
   .then(res=> console.log("連線資料成功"));
 
 
