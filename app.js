@@ -9,15 +9,29 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const storyRouter = require('./routes/story');
 const brickRouter = require('./routes/brick');
 const postRouter = require('./routes/posts');
+const openaiRouter = require('./routes/openai');
+
 
 const mongoose = require('mongoose');
+
+
+// const { Configuration, OpenAIApi } = require("openai");
+// const openai = new OpenAIApi(new Configuration({
+//   apiKey: process.env.OPENAI_API_KEY,
+// }));
+
+
+
+
+
+
+
 
 var app = express();
 
@@ -37,5 +51,6 @@ app.use('/users', usersRouter);
 app.use('/story', storyRouter);
 app.use('/brick', brickRouter);
 app.use('/post', postRouter);
+app.use('/openai', openaiRouter);
 
 module.exports = app;
