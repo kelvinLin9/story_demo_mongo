@@ -13,6 +13,9 @@ const brickSchema = new mongoose.Schema({
     type: String,
     required: [true, 'image 未填寫']
   },
+  image_v: { 
+    type: String,
+  },
   content: [{ 
     type: mongoose.Schema.ObjectId,
     ref: "Post",

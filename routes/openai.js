@@ -14,13 +14,13 @@ router.post('/generate', async (req, res) => {
       return res.status(400).json({ error: 'No messages provided' });
     }
 
-    // 调用 OpenAI API
+    
   const completion = await openai.chat.completions.create({
-    messages: [{ role: "system", content: messages }],
+    messages: [{ role: "user", content: messages }],
     model: "gpt-3.5-turbo",
   });
 
-    // 发送响应
+
     res.json({ response: completion.choices[0] });
   } catch (error) {
     console.error('Error calling OpenAI:', error);
