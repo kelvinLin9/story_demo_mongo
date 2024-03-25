@@ -3,18 +3,15 @@ const router = express.Router();
 require('dotenv').config();
 const { OpenAI } = require('openai');
 
-// 直接在构造函数中使用环境变量提供的 API 密钥
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
 router.post('/generate', async (req, res) => {
   try {
-    // 从请求体中获取 messages
     const messages = req.body.messages;
     if (!messages) {
       return res.status(400).json({ error: 'No messages provided' });
     }
 
-    
   const completion = await openai.chat.completions.create({
     messages: [{ role: "user", content: messages }],
     model: "gpt-3.5-turbo",
