@@ -16,7 +16,7 @@ const storyRouter = require('./routes/story');
 const brickRouter = require('./routes/brick');
 const postRouter = require('./routes/posts');
 const openaiRouter = require('./routes/openai');
-
+const chatRouter = require('./routes/chat');
 
 const mongoose = require('mongoose');
 
@@ -52,5 +52,6 @@ app.use('/story', storyRouter);
 app.use('/brick', brickRouter);
 app.use('/post', postRouter);
 app.use('/openai', openaiRouter);
+app.use('/chat', chatRouter);
 
 module.exports = app;
