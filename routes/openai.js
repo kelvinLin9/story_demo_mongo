@@ -14,7 +14,7 @@ router.post('/generate', async (req, res) => {
 
   const completion = await openai.chat.completions.create({
     messages: [{ role: "user", content: messages }],
-    model: "gpt-3.5-turbo",
+    model: "gpt-4",
   });
 
 
