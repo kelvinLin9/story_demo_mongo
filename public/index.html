@@ -23,43 +23,40 @@
     </form>
 
     <script>
-        var socket = io('https://story-demo-mongo.onrender.com/');
-        var userRoom = 'TestRoom'; // 可以根據需要調整房間名
-
-        function joinRoom() {
-            var username = document.getElementById('username').value.trim();
-            if(username) {
-                socket.emit('joinRoom', { username: username, room: userRoom });
-
-                // 顯示消息表單，隱藏登錄表單
-                document.getElementById('message-form').style.display = 'block';
-                document.getElementById('login-form').style.display = 'none';
-            } else {
-                alert('請輸入用戶名');
-            }
-        }
-
-        socket.on('message', function(data) {
-            const { message, username, time } = data;
-            const formattedTime = new Date(time).toLocaleTimeString();
-            var item = document.createElement('li');
-            item.textContent = `${username} @ ${formattedTime}: ${message}`;
-            document.getElementById('messages').appendChild(item);
-            window.scrollTo(0, document.body.scrollHeight);
-        });
-
-        document.getElementById('message-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const message = document.getElementById('m').value;
-            if (message) {
-                socket.emit('chatMessage', {
-                    message: message,
-                    username: document.getElementById('username').value, // 使用輸入的用戶名
-                    time: new Date() // 發送當前時間
-                });
-                document.getElementById('m').value = '';
-            }
-        });
-    </script>
+      var socket = io('https://story-demo-mongo.onrender.com/');
+      var userRoom = 'TestRoom'; // 根據需要調整房間名
+  
+      function joinRoom() {
+          var username = document.getElementById('username').value.trim();
+          if (username) {
+              socket.emit('joinRoom', { username: username, room: userRoom });
+  
+              // 顯示消息表單，隱藏登錄表單
+              document.getElementById('message-form').style.display = 'block';
+              document.getElementById('login-form').style.display = 'none';
+          } else {
+              alert('請輸入用戶名');
+          }
+      }
+  
+      socket.on('message', function(data) {
+          const { text, user } = data; // 使用後端發送的對象屬性
+          const formattedTime = new Date().toLocaleTimeString(); // 前端生成顯示時間
+          var item = document.createElement('li');
+          item.textContent = `${user} @ ${formattedTime}: ${text}`; // 根據後端對象屬性顯示
+          document.getElementById('messages').appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight);
+      });
+  
+      document.getElementById('message-form').addEventListener('submit', function(e) {
+          e.preventDefault();
+          const message = document.getElementById('m').value;
+          if (message) {
+              socket.emit('chatMessage', message); // 僅發送消息內容
+              document.getElementById('m').value = '';
+          }
+      });
+  </script>
+  
 </body>
 </html>
