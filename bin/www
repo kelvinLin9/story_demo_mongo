@@ -3,10 +3,11 @@
 /**
  * Module dependencies.
  */
-
 var app = require('../app');
 var debug = require('debug')('coffee:server');
 var http = require('http');
+var socketIo = require('socket.io');
+const ChatMessage = require('../models/chatModel');
 
 /**
  * Get port from environment and store in Express.
@@ -18,30 +19,52 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
 
-// socket
-var socketIo = require('socket.io'); 
-var io = socketIo(server); 
-const ChatMessage = require('../models/chatModel');
+// Initialize socket.io
+var io = socketIo(server);
+
+// Users array to keep track of all connected users
+const users = [];
+
+// Function to find user by socket ID
+function getUser(id) {
+  return users.find(user => user.id === id);
+}
+
+// Function to add user to the storage
+function addUser({ id, username, room }) {
+  const user = { id, username, room };
+  users.push(user);
+  return user;
+}
+
+// Function to remove user from the storage
+function removeUser(id) {
+  const index = users.findIndex(user => user.id === id);
+  if (index !== -1) {
+    return users.splice(index, 1)[0]; // remove the user and return it
+  }
+}
 
 io.on('connection', (socket) => {
   console.log('New WebSocket connection');
 
+  // When a user joins a room
   socket.on('joinRoom', ({ username, room }) => {
     const user = addUser({ id: socket.id, username, room });
     socket.join(user.room);
-    // 欢迎新用户
+
+    // Welcome new user
     socket.emit('message', 'Welcome to the chat room!');
-    // 广播新用户加入
+
+    // Broadcast when a user connects
     socket.broadcast.to(user.room).emit('message', `${user.username} has joined the chat!`);
-});
+  });
 
-
-  // 处理聊天消息
+  // Handling chat messages
   socket.on('chatMessage', async (msg) => {
-    const user = getUser(socket.id); // 假设你有一个函数来根据socket.id获取用户信息
+    const user = getUser(socket.id);
     const message = new ChatMessage({
       username: user.username,
       room: user.room,
@@ -56,41 +79,18 @@ io.on('connection', (socket) => {
     }
   });
 
-// 用於存儲連線的用戶
-const users = [];
-// 根據 socket ID 獲取用戶
-function getUser(id) {
-  return users.find(user => user.id === id);
-}
-
-// 新增用戶到存儲中
-function addUser({ id, username, room }) {
-  const user = { id, username, room };
-  users.push(user);
-  return user;
-}
-
-// 根據 ID 移除用戶
-// socket.on('disconnect', () => {
-//   const user = removeUser(socket.id);
-//   if (user) {
-//       io.to(user.room).emit('message', `${user.username} has left the chat`);
-//   }
-// });
-
-
-
-
-  // 用户断开连接的逻辑
+  // When a user disconnects
   socket.on('disconnect', () => {
-    io.to(users.room).emit('message', `${users.username} has left the chat`);
+    const user = removeUser(socket.id);
+    if (user) {
+      io.to(user.room).emit('message', `${user.username} has left the chat`);
+    }
   });
 });
-// ---
+
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
@@ -98,27 +98,22 @@ server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
-
 function normalizePort(val) {
   var port = parseInt(val, 10);
-
   if (isNaN(port)) {
     // named pipe
     return val;
   }
-
   if (port >= 0) {
     // port number
     return port;
   }
-
   return false;
 }
 
 /**
  * Event listener for HTTP server "error" event.
  */
-
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -146,7 +141,6 @@ function onError(error) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
