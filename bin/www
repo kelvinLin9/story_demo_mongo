@@ -30,13 +30,14 @@ io.on('connection', (socket) => {
   console.log('New WebSocket connection');
 
   socket.on('joinRoom', ({ username, room }) => {
-    const user = { id: socket.id, username, room };
+    const user = addUser({ id: socket.id, username, room });
     socket.join(user.room);
     // 欢迎新用户
     socket.emit('message', 'Welcome to the chat room!');
     // 广播新用户加入
     socket.broadcast.to(user.room).emit('message', `${user.username} has joined the chat!`);
-  });
+});
+
 
   // 处理聊天消息
   socket.on('chatMessage', async (msg) => {
@@ -55,9 +56,34 @@ io.on('connection', (socket) => {
     }
   });
 
+// 用於存儲連線的用戶
+const users = [];
+// 根據 socket ID 獲取用戶
+function getUser(id) {
+  return users.find(user => user.id === id);
+}
+
+// 新增用戶到存儲中
+function addUser({ id, username, room }) {
+  const user = { id, username, room };
+  users.push(user);
+  return user;
+}
+
+// 根據 ID 移除用戶
+// socket.on('disconnect', () => {
+//   const user = removeUser(socket.id);
+//   if (user) {
+//       io.to(user.room).emit('message', `${user.username} has left the chat`);
+//   }
+// });
+
+
+
+
   // 用户断开连接的逻辑
   socket.on('disconnect', () => {
-    io.to(user.room).emit('message', `${user.username} has left the chat`);
+    io.to(users.room).emit('message', `${users.username} has left the chat`);
   });
 });
 // ---

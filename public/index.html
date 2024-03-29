@@ -1,13 +1,43 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Express</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
+    <meta charset="UTF-8">
+    <title>聊天室測試</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <style>
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 8px; margin-bottom: 2px; background-color: #f3f3f3; }
+        #message-form { margin-top: 20px; }
+    </style>
 </head>
-
 <body>
-  <h1>Express</h1>
-  <p>Welcome to Express</p>
-</body>
+    <ul id="messages"></ul>
+    <form id="message-form">
+        <input id="m" autocomplete="off" /><button>發送</button>
+    </form>
 
+    <script>
+        var socket = io('http://localhost:3000');
+
+        // 加入房間
+        socket.emit('joinRoom', { username: 'TestUser', room: 'TestRoom' });
+
+        // 當接收到新消息時
+        socket.on('message', function(msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            document.getElementById('messages').appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        // 發送消息
+        document.getElementById('message-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // 防止表單提交刷新頁面
+            if (document.getElementById('m').value) {
+                socket.emit('chatMessage', document.getElementById('m').value);
+                document.getElementById('m').value = '';
+            }
+        });
+    </script>
+</body>
 </html>
