@@ -3,60 +3,61 @@
 /**
  * Module dependencies.
  */
-var app = require('../app');
-var debug = require('debug')('coffee:server');
-var http = require('http');
-var socketIo = require('socket.io');
+const app = require('../app');
+const debug = require('debug')('coffee:server');
+const http = require('http');
+const socketIo = require('socket.io');
 const ChatMessage = require('../models/chatModel');
 
 /**
  * Get port from environment and store in Express.
  */
-console.log(process.env.PORT)
-var port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-var server = http.createServer(app);
-//
+const server = http.createServer(app);
 
+/**
+ * User management utilities.
+ */
 const users = [];
 
-const addUser = ({ id, username, room }) => {
+function addUser({ id, username, room }) {
   username = username.trim().toLowerCase();
   room = room.trim().toLowerCase();
 
-  // 檢查用戶名是否存在
   const existingUser = users.find((user) => user.room === room && user.username === username);
-  if(existingUser) {
+  if (existingUser) {
     return { error: 'Username is taken.' };
   }
 
-  // 儲存用戶
   const user = { id, username, room };
   users.push(user);
   return { user };
-};
+}
 
-const removeUser = (id) => {
+function removeUser(id) {
   const index = users.findIndex((user) => user.id === id);
-  if(index !== -1) {
+  if (index !== -1) {
     return users.splice(index, 1)[0];
   }
-};
+}
 
-const getUser = (id) => {
+function getUser(id) {
   return users.find((user) => user.id === id);
-};
+}
 
-const getUsersInRoom = (room) => {
+function getUsersInRoom(room) {
   return users.filter((user) => user.room === room);
-};
+}
 
-
-var io = socketIo(server);
+/**
+ * Initialize socket.io
+ */
+const io = socketIo(server);
 
 io.on('connection', (socket) => {
   console.log('New WebSocket connection');
@@ -64,40 +65,31 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', ({ username, room }) => {
     const { error, user } = addUser({ id: socket.id, username, room });
 
-    if(error) {
+    if (error) {
       return console.log(error);
     }
 
     socket.join(user.room);
-    socket.emit('message', { user: '系統', text: `${user.username}, 歡迎進入 ${user.room} 聊天室!`});
-    socket.broadcast.to(user.room).emit('message', { user: '系統', text: `${user.username} 加入了聊天室!` });
+    socket.emit('message', { username: '系統', text: `歡迎進入 ${user.room} 聊天室!` });
+    socket.broadcast.to(user.room).emit('message', { username: '系統', text: `${user.username} 加入了聊天室!` });
   });
 
   socket.on('chatMessage', (message) => {
     const user = getUser(socket.id);
 
-    // 檢查用戶是否存在
-    if (!user) {
-        console.log('用戶未找到');
-        return; // 結束處理器執行
+    if (user) {
+      io.to(user.room).emit('message', { username: user.username, text: message });
     }
+  });
 
-    io.to(user.room).emit('message', { user: user.username, text: message });
+  socket.on('disconnect', () => {
+    const user = removeUser(socket.id);
+
+    if (user) {
+      io.to(user.room).emit('message', { username: '系統', text: `${user.username} 離開了聊天室。` });
+    }
+  });
 });
-
-
-socket.on('disconnect', () => {
-  const user = removeUser(socket.id);
-
-  if (!user) {
-      console.log('用戶未找到，可能已經被移除');
-      return; // 結束處理器執行
-  }
-
-  io.to(user.room).emit('message', { user: '系統', text: `${user.username} 離開了聊天室。` });
-});
-
-
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -110,14 +102,12 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  const port = parseInt(val, 10);
   if (isNaN(port)) {
-    // named pipe
-    return val;
+    return val; // named pipe
   }
   if (port >= 0) {
-    // port number
-    return port;
+    return port; // port number
   }
   return false;
 }
@@ -130,18 +120,16 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      console.error(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -153,10 +141,7 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-})
