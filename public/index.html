@@ -17,7 +17,8 @@
     </form>
 
     <script>
-        var socket = io('http://localhost:3000');
+        // var socket = io('http://localhost:3000');
+        var socket = io('https://story-demo-mongo.onrender.com/');
 
         // 加入房間
         socket.emit('joinRoom', { username: 'TestUser', room: 'TestRoom' });
