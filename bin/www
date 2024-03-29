@@ -20,45 +20,71 @@ app.set('port', port);
  * Create HTTP server.
  */
 var server = http.createServer(app);
+//
 
-// Initialize socket.io
+const users = [];
+
+const addUser = ({ id, username, room }) => {
+  username = username.trim().toLowerCase();
+  room = room.trim().toLowerCase();
+
+  // 檢查用戶名是否存在
+  const existingUser = users.find((user) => user.room === room && user.username === username);
+  if(existingUser) {
+    return { error: 'Username is taken.' };
+  }
+
+  // 儲存用戶
+  const user = { id, username, room };
+  users.push(user);
+  return { user };
+};
+
+const removeUser = (id) => {
+  const index = users.findIndex((user) => user.id === id);
+  if(index !== -1) {
+    return users.splice(index, 1)[0];
+  }
+};
+
+const getUser = (id) => {
+  return users.find((user) => user.id === id);
+};
+
+const getUsersInRoom = (room) => {
+  return users.filter((user) => user.room === room);
+};
+
+
 var io = socketIo(server);
 
-// Node.js 伺服器端代碼節選
 io.on('connection', (socket) => {
   console.log('New WebSocket connection');
 
   socket.on('joinRoom', ({ username, room }) => {
-      const user = addUser({ id: socket.id, username, room });
-      socket.join(user.room);
-      socket.emit('message', { username: '系統', message: '歡迎進入聊天室!', time: new Date() });
-      socket.broadcast.to(user.room).emit('message', { username: '系統', message: `${user.username} 加入了聊天室!`, time: new Date() });
+    const { error, user } = addUser({ id: socket.id, username, room });
+
+    if(error) {
+      return console.log(error);
+    }
+
+    socket.join(user.room);
+    socket.emit('message', { user: '系統', text: `${user.username}, 歡迎進入 ${user.room} 聊天室!`});
+    socket.broadcast.to(user.room).emit('message', { user: '系統', text: `${user.username} 加入了聊天室!` });
   });
 
-  socket.on('chatMessage', async ({ message, username, time }) => {
-      const user = getUser(socket.id);
-      if (user) {
-          const chatMessage = new ChatMessage({
-              username: user.username,
-              room: user.room,
-              message: message,
-              time: time
-          });
+  socket.on('chatMessage', (message) => {
+    const user = getUser(socket.id);
 
-          try {
-              await chatMessage.save();
-              io.to(user.room).emit('message', { username, message, time });
-          } catch (error) {
-              console.error('Message save error:', error);
-          }
-      }
+    io.to(user.room).emit('message', { user: user.username, text: message });
   });
 
   socket.on('disconnect', () => {
-      const user = removeUser(socket.id);
-      if (user) {
-          io.to(user.room).emit('message', { username: '系統', message: `${user.username} 離開了聊天室`, time: new Date() });
-      }
+    const user = removeUser(socket.id);
+
+    if(user) {
+      io.to(user.room).emit('message', { user: '系統', text: `${user.username} 離開了聊天室。` });
+    }
   });
 });
 
