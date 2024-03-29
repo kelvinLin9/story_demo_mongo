@@ -76,17 +76,27 @@ io.on('connection', (socket) => {
   socket.on('chatMessage', (message) => {
     const user = getUser(socket.id);
 
-    io.to(user.room).emit('message', { user: user.username, text: message });
-  });
-
-  socket.on('disconnect', () => {
-    const user = removeUser(socket.id);
-
-    if(user) {
-      io.to(user.room).emit('message', { user: '系統', text: `${user.username} 離開了聊天室。` });
+    // 檢查用戶是否存在
+    if (!user) {
+        console.log('用戶未找到');
+        return; // 結束處理器執行
     }
-  });
+
+    io.to(user.room).emit('message', { user: user.username, text: message });
 });
+
+
+socket.on('disconnect', () => {
+  const user = removeUser(socket.id);
+
+  if (!user) {
+      console.log('用戶未找到，可能已經被移除');
+      return; // 結束處理器執行
+  }
+
+  io.to(user.room).emit('message', { user: '系統', text: `${user.username} 離開了聊天室。` });
+});
+
 
 
 /**
