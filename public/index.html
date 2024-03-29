@@ -40,13 +40,14 @@
       }
   
       socket.on('message', function(data) {
-          const { text, user } = data; // 使用後端發送的對象屬性
-          const formattedTime = new Date().toLocaleTimeString(); // 前端生成顯示時間
-          var item = document.createElement('li');
-          item.textContent = `${user} @ ${formattedTime}: ${text}`; // 根據後端對象屬性顯示
-          document.getElementById('messages').appendChild(item);
-          window.scrollTo(0, document.body.scrollHeight);
-      });
+        const { text, username } = data; // 使用后端发送的对象属性
+        const formattedTime = new Date().toLocaleTimeString(); // 前端生成显示时间
+        var item = document.createElement('li');
+        item.textContent = `${username} @ ${formattedTime}: ${text}`; // 根据后端对象属性显示
+        document.getElementById('messages').appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+
   
       document.getElementById('message-form').addEventListener('submit', function(e) {
           e.preventDefault();
