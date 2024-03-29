@@ -6,8 +6,10 @@
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <style>
         #messages { list-style-type: none; margin: 0; padding: 0; }
-        #messages li { padding: 8px; margin-bottom: 2px; background-color: #f3f3f3; }
+        #messages li { padding: 8px; margin-bottom: 2px; background-color: #f3f3f3; display: flex; justify-content: space-between; align-items: center; }
         #message-form { margin-top: 20px; }
+        .message-content { flex: 1; }
+        .message-meta { margin-left: 16px; font-size: 0.8em; color: #666; }
     </style>
 </head>
 <body>
@@ -17,16 +19,28 @@
     </form>
 
     <script>
-        // var socket = io('http://localhost:3000');
         var socket = io('https://story-demo-mongo.onrender.com/');
 
         // 加入房間
         socket.emit('joinRoom', { username: 'TestUser', room: 'TestRoom' });
 
         // 當接收到新消息時
-        socket.on('message', function(msg) {
+        socket.on('message', function(data) {
+            const msg = data.message;
+            const username = data.username;
+            const time = new Date(data.time).toLocaleTimeString();
             var item = document.createElement('li');
-            item.textContent = msg;
+            var messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = msg;
+
+            var messageMeta = document.createElement('div');
+            messageMeta.className = 'message-meta';
+            messageMeta.textContent = `${username} @ ${time}`;
+
+            item.appendChild(messageContent);
+            item.appendChild(messageMeta);
+
             document.getElementById('messages').appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });
@@ -35,7 +49,12 @@
         document.getElementById('message-form').addEventListener('submit', function(e) {
             e.preventDefault(); // 防止表單提交刷新頁面
             if (document.getElementById('m').value) {
-                socket.emit('chatMessage', document.getElementById('m').value);
+                // 假設您的伺服器期望一個包含消息、用戶名和時間戳的對象
+                socket.emit('chatMessage', {
+                    message: document.getElementById('m').value,
+                    username: 'TestUser', // 實際應用中，這應該是動態的
+                    time: new Date() // 發送當前時間
+                });
                 document.getElementById('m').value = '';
             }
         });
