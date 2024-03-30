@@ -72,6 +72,9 @@ io.on('connection', (socket) => {
     socket.join(user.room);
     socket.emit('message', { username: '系統', text: `歡迎進入 ${user.room} 聊天室!` });
     socket.broadcast.to(user.room).emit('message', { username: '系統', text: `${user.username} 加入了聊天室!` });
+    //
+    const usersInRoom = getUsersInRoom(user.room);
+    io.to(user.room).emit('roomData', { room: user.room, users: usersInRoom.length });
   });
 
   socket.on('chatMessage', (message) => {
@@ -86,6 +89,8 @@ io.on('connection', (socket) => {
     const user = removeUser(socket.id);
 
     if (user) {
+      const usersInRoom = getUsersInRoom(user.room);
+      io.to(user.room).emit('roomData', { room: user.room, users: usersInRoom.length });
       io.to(user.room).emit('message', { username: '系統', text: `${user.username} 離開了聊天室。` });
     }
   });

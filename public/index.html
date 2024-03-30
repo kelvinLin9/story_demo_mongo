@@ -13,6 +13,9 @@
     </style>
 </head>
 <body>
+ 
+    <div id="room-info"></div>
+
     <div id="login-form">
         <input id="username" placeholder="輸入你的名字" autocomplete="off" />
         <input id="room" placeholder="輸入房間名稱" autocomplete="off" /> <!-- 添加房間名輸入 -->
@@ -49,7 +52,11 @@
         document.getElementById('messages').appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
-  
+
+      socket.on('roomData', function({ room, users }) {
+        document.getElementById('room-info').innerHTML = `房間: ${room} - 在線人數: ${users}`;
+      });
+
       document.getElementById('message-form').addEventListener('submit', function(e) {
           e.preventDefault();
           const message = document.getElementById('m').value;
