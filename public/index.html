@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>聊天室测试</title>
+    <title>聊天室測試</title>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <style>
         #messages { list-style-type: none; margin: 0; padding: 0; }
@@ -14,13 +14,13 @@
 </head>
 <body>
     <div id="login-form">
-        <input id="username" placeholder="输入你的名字" autocomplete="off" />
-        <input id="room" placeholder="输入房间名称" autocomplete="off" /> <!-- 添加房间名输入 -->
+        <input id="username" placeholder="輸入你的名字" autocomplete="off" />
+        <input id="room" placeholder="輸入房間名稱" autocomplete="off" /> <!-- 添加房間名輸入 -->
         <button onclick="joinRoom()">加入聊天室</button>
     </div>
     <ul id="messages"></ul>
     <form id="message-form" style="display: none;">
-        <input id="m" autocomplete="off" /><button>发送</button>
+        <input id="m" autocomplete="off" /><button>發送</button>
     </form>
 
     <script>
@@ -28,16 +28,16 @@
   
       function joinRoom() {
           var username = document.getElementById('username').value.trim();
-          var room = document.getElementById('room').value.trim(); // 获取房间名
+          var room = document.getElementById('room').value.trim(); // 獲取房間名
           
-          if (username && room) { // 确保用户名和房间名都已输入
+          if (username && room) { // 確保用戶名和房間名都已輸入
               socket.emit('joinRoom', { username: username, room: room });
   
-              // 显示消息表单，隐藏登录表单
+              // 顯示消息表單，隱藏登錄表單
               document.getElementById('message-form').style.display = 'block';
               document.getElementById('login-form').style.display = 'none';
           } else {
-              alert('请输入用户名和房间名');
+              alert('請輸入用戶名和房間名');
           }
       }
   
@@ -54,7 +54,7 @@
           e.preventDefault();
           const message = document.getElementById('m').value;
           if (message) {
-              socket.emit('chatMessage', message); // 只发送消息内容
+              socket.emit('chatMessage', message); // 僅發送消息內容
               document.getElementById('m').value = '';
           }
       });
